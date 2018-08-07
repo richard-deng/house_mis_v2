@@ -5,7 +5,11 @@
 <link href="/mis/static/css/jquery-confirm.min.css" rel="stylesheet">
 <link rel="stylesheet" href="/mis/static/css/themes/default/style.min.css" />
 <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
-
+<style>
+    .question_summer_note {
+        padding-left: 40px; padding-right: 30px; padding-top: 30px;
+    }
+</style>
 </%block>
 
 
@@ -80,7 +84,7 @@
 
                         <div class="form-group" id="rich_text_add_div">
                             <div class="row">
-                                <div class="col-sm-10 col-sm-offset-2">
+                                <div class="col-sm-10 col-sm-offset-2 question_summer_note">
                                     <textarea id="summernote" name="editordata"></textarea>
                                 </div>
                             </div>
@@ -165,7 +169,7 @@
 
                         <div class="form-group" id="rich_text_view_div">
                             <div class="row">
-                                <div class="col-sm-12">
+                                <div class="col-sm-12 question_summer_note">
                                     <textarea id="summernote_view" name="editordata"></textarea>
                                 </div>
                             </div>
