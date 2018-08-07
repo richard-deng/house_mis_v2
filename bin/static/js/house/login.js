@@ -13,18 +13,19 @@ $(document).ready(function(){
 	            dataType: 'json',
 	            data: post_data,
 	            success: function(data) {
-                    var respcd = data.respcd;
-                    if(respcd !== '0000'){
-                        var resperr = data.resperr;
-                        var respmsg = data.resmsg;
-                        var msg = resperr ? resperr : resmsg;
-                        toastr.warning(msg);
-                        return false;
-                    } else {
-                        var userid = data.data.userid;
-                        window.localStorage.setItem('myid', userid);
-                        window.location.href="/mis/v1/page/box_list.html";
-					}
+                        var respcd = data.respcd;
+                        if(respcd !== '0000'){
+                            var resperr = data.resperr;
+                            var respmsg = data.resmsg;
+                            var msg = resperr ? resperr : resmsg;
+                            toastr.warning(msg);
+                            return false;
+                        } else {
+                            var userid = data.data.userid;
+                            window.localStorage.setItem('myid', userid);
+                            // window.location.href="/mis/v1/page/box_list.html";
+                            window.location.href="/mis/v1/page/user_list.html";
+		        }
 	            },
 	            error: function(data) {
                     toastr.warning('请求数据异常');
