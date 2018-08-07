@@ -1,0 +1,17 @@
+.top {
+    margin-top: 12px;
+}
+
+.btn-sm {
+    margin-right: 3px;
+}
+
+.drop-pad {
+    padding-right: 0px!important;
+    padding-left: 0px!important;
+}
+
+textarea.form-control {
+    resize: none;
+}
+

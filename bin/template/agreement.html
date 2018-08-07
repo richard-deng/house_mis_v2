@@ -1,0 +1,66 @@
+## -*- coding: utf-8 -*-
+<%inherit file="/base.html" />
+<%block name="head_media">
+<link href="/mis/static/css/house/define_label_error.css" rel="stylesheet">
+
+<style>
+    .agreement_create {
+        padding-left: 30px!important;
+    }
+    textarea {
+        width: 500px!important;
+        height: 400px!important;
+        max-width: 500px!important;
+        max-height: 400px!important;
+    }
+    #article_content{
+        width: 280px;
+        height: 400px;
+        max-height: 400px;
+        max-width: 280px;
+        border: 1px solid darkgray;
+        border-radius: 4px;
+        overflow: auto;
+    }
+    .agreement_summer_note {
+        padding-left: 40px; padding-right: 20px
+    }
+</style>
+</%block>
+
+<%block name="page">
+    <div class="row-fluid">
+        <div class="box span12">
+            <div class="box-header" data-original-title="">
+                <h2><i class="icon-asterisk"></i><span class="break"></span>协议</h2>
+            </div>
+            <div class="box-content">
+                <form class="form-inline box-list-query" id="box_list_query">
+                    <button type="button" class="btn btn-default" id="save_agreement">保存</button>
+                </form>
+                <label id="query_label_error"></label>
+
+                <div class="row agreement_create agreement_summer_note">
+                    <textarea id="summernote" name="editor_agreement"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</%block>
+
+<%block name="body_media">
+<script src="/mis/static/js/jquery.validate.js" type="text/javascript"></script>
+<script src="/mis/static/js/jquery.validate.messages_cn.js" type="text/javascript"></script>
+<script src="/mis/static/js/jquery.form.js" type="text/javascript"></script>
+<script src="/mis/static/js/toastr.js" type="text/javascript"></script>
+<script src="/mis/static/js/house/base.js" type="text/javascript"></script>
+<!-- include summernote css/js -->
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+<!--<link href="/mis/static/css/summernote.css" rel="stylesheet">-->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+<!--<script src="/mis/static/js/summernote.min.js"></script>-->
+<!-- include lang -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/lang/summernote-zh-CN.js"></script>
+<!--<script src="/mis/static/js/summernote-zh-CN.js"></script>-->
+<script src="/mis/static/js/house/agreement.js" type="text/javascript"></script>
+</%block>

@@ -1,0 +1,192 @@
+## -*- coding: utf-8 -*-
+<%inherit file="/base.html" />
+<%block name="head_media">
+<link href="/mis/static/css/house/define_label_error.css" rel="stylesheet">
+
+<style>
+    .carousel_list_query {
+        padding-left: 15px!important;
+    }
+    .dataTables_length {
+        padding-left: 30px!important;
+    }
+</style>
+</%block>
+
+<%block name="page">
+    <div class="row-fluid">
+        <div class="box span12">
+            <div class="box-header" data-original-title="">
+                <h2><i class="icon-asterisk"></i><span class="break"></span>轮播</h2>
+            </div>
+            <div class="box-content">
+                <form class="form-inline carousel-list-query" id="carousel_list_query">
+
+                    <div class="form-group">
+                        <label for="carousel_name">名称</label>
+                        <input type="text" class="form-control" id="carousel_name" name="carousel_name" placeholder="">
+                    </div>
+
+                    <button type="button" class="btn btn-primary" id="carousel_search">搜索</button>
+                    <button type="button" class="btn btn-default" id="carousel_create">添加</button>
+                </form>
+                <label id="query_label_error"></label>
+                <table id="carouselList" class="display table table-striped table-bordered table-hover dataTable no-footer dtr-inline" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>图片</th>
+                        <th>优先级</th>
+                        <th>是否可用</th>
+                        <th>创建时间</th>
+                        <th>更新时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="carouselCreateModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">添加</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="carouselCreateForm" role="form">
+
+                        <div class="form-group">
+                            <label for="carousel_name_add" class="col-sm-2 control-label">名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="carousel_name_add" name="carousel_name_add" placeholder="必填">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="carousel_priority_add" class="col-sm-2 control-label">优先级</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="carousel_priority_add" name="carousel_priority_add">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="carousel_available_add" class="col-sm-2 control-label">是否启用</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="carousel_available_add" name="carousel_available_add">
+                                    <option value="0">关闭</option>
+                                    <option value="1">打开</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="carousel_icon_url_add" class="col-sm-2 control-label">图标链接</label>
+                            <div class="col-sm-2">
+                                <input type="file" id="iconCreateUpload" onchange="upload_file(this)">
+                            </div>
+                            <div class="col-sm-5">
+
+                            </div>
+                            <div class="p_img_l">
+                                <div id="preview">
+                                    <img id="carousel_icon_url_add"  src="" width="80px" height="40px"/>
+                                    <span id="carousel_icon_name_add" hidden></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="carouselCreateSubmit">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="carouselViewModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">查看</h4><span id="view_carousel_id" hidden></span>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="carouselViewForm" role="form">
+
+                        <div class="form-group">
+                            <label for="carousel_name_view" class="col-sm-2 control-label">名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="carousel_name_view" name="carousel_name_view" placeholder="必填">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="carousel_priority_view" class="col-sm-2 control-label">优先级</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="carousel_priority_view" name="carousel_priority_view">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="carousel_available_view" class="col-sm-2 control-label">是否启用</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="carousel_available_view" name="carousel_available_view">
+                                    <option value="0">关闭</option>
+                                    <option value="1">打开</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="carousel_icon_url_view" class="col-sm-2 control-label">图标链接</label>
+                            <div class="col-sm-2">
+                                <input type="file" id="iconViewUpload" onchange="upload_view_file(this)">
+                            </div>
+                            <div class="col-sm-5">
+
+                            </div>
+                            <div class="p_img_l">
+                                <div id="preview_view">
+                                    <img id="carousel_icon_url_view"  src="" width="80px" height="40px"/>
+                                    <span id="carousel_icon_name_view" hidden></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="carouselViewSubmit">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</%block>
+
+<%block name="body_media">
+<script src="/mis/static/js/jquery.validate.js" type="text/javascript"></script>
+<script src="/mis/static/js/jquery.validate.messages_cn.js" type="text/javascript"></script>
+<script src="/mis/static/js/jquery.form.js" type="text/javascript"></script>
+<script src="/mis/static/js/bootstrap-typeahead.js" type="text/javascript"></script>
+<script src="/mis/static/js/toastr.js" type="text/javascript"></script>
+<script src="/mis/static/js/md5.min.js" type="text/javascript"></script>
+<script src="/mis/static/js/house/base.js" type="text/javascript"></script>
+<script src="/mis/static/js/house/carousel.js" type="text/javascript"></script>
+</%block>

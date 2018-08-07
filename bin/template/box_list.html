@@ -1,0 +1,482 @@
+## -*- coding: utf-8 -*-
+<%inherit file="/base.html" />
+
+<%block name="head_media">
+<link href="/mis/static/css/house/define_label_error.css" rel="stylesheet">
+
+<style>
+    .box_list_query {
+        padding-left: 15px!important;
+    }
+    .dataTables_length {
+        padding-left: 30px!important;
+    }
+    textarea {
+        width: 500px!important;
+        height: 400px!important;
+        max-width: 500px!important;
+        max-height: 400px!important;
+    }
+    #article_content{
+        width: 280px;
+        height: 400px;
+        max-height: 400px;
+        max-width: 280px;
+        border: 1px solid darkgray;
+        border-radius: 4px;
+        overflow: auto;
+    }
+</style>
+</%block>
+
+<%block name="page">
+
+    <div class="row-fluid">
+        <div class="box span12">
+            <div class="box-header" data-original-title="">
+                <h2><i class="icon-asterisk"></i><span class="break"></span>九宫格</h2>
+            </div>
+            <div class="box-content">
+                <form class="form-inline box-list-query" id="box_list_query">
+                    <div class="form-group">
+                        <label for="box_name">名称</label>
+                        <input type="text" class="form-control" id="box_name" name="box_name" placeholder="">
+                    </div>
+                    <span id="box_parent" hidden>-1</span>
+                    <span id="up_parent" hidden></span>
+                    <button type="button" class="btn btn-primary" id="box_search">搜索</button>
+                    <button type="button" class="btn btn-default" id="box_create">添加</button>
+                </form>
+                <label id="query_label_error"></label>
+                <table id="boxList" class="display table table-striped table-bordered table-hover dataTable no-footer dtr-inline" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>类型</th>
+                        <th>图标</th>
+                        <th>优先级</th>
+                        <th>是否可用</th>
+                        <th>创建时间</th>
+                        <th>更新时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div><!--/span-->
+
+    </div><!--/row-->
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="boxViewModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">查看</h4><span id="view_box_id" hidden></span>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="boxViewForm" role="form">
+
+                        <div class="form-group">
+                            <label for="box_name_view" class="col-sm-2 control-label">名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="box_name_view" name="box_name_view" placeholder="必填">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="box_type_view" class="col-sm-2 control-label">类型</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="box_type_view" name="box_type_view">
+                                    <option value="0">订单</option>
+                                    <option value="1">文本</option>
+                                    <option value="2">盒子</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="box_priority_view" class="col-sm-2 control-label">优先级</label>
+                            <div class="col-sm-10">
+                                <!--
+                                <input type="text" class="form-control" id="box_priority_view" name="box_priority_view" placeholder="必填">
+                                -->
+                                <select class="form-control" id="box_priority_view" name="box_priority_view">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="box_available_view" class="col-sm-2 control-label">是否启用</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="box_available_view" name="box_available_view">
+                                    <option value="0">关闭</option>
+                                    <option value="1">打开</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="box_icon_url_view" class="col-sm-2 control-label">图标链接</label>
+                            <div class="col-sm-2">
+                                <input type="file" id="iconViewUpload" onchange="upload_view_file(this)">
+                            </div>
+                            <div class="col-sm-5">
+
+                            </div>
+                            <div class="p_img_l">
+                                <div id="preview_view">
+                                    <img id="box_icon_url_view"  src="" width="80px" height="40px"/>
+                                    <span id="box_icon_name_view" hidden></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="boxViewSubmit">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="boxCreateModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">添加</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="boxCreateForm" role="form">
+
+                        <div class="form-group">
+                            <label for="box_name_add" class="col-sm-2 control-label">名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="box_name_add" name="box_name_add" placeholder="必填">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="box_type_add" class="col-sm-2 control-label">类型</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="box_type_add" name="box_type_add">
+                                    <option value="0">订单</option>
+                                    <option value="1">文本</option>
+                                    <option value="2">分类</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="box_priority_add" class="col-sm-2 control-label">优先级</label>
+                            <div class="col-sm-10">
+                                <!--
+                                <input type="text" class="form-control" id="box_priority_add" name="box_priority_add" placeholder="必填">
+                                -->
+                                <select class="form-control" id="box_priority_add" name="box_priority_add">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="box_available_add" class="col-sm-2 control-label">是否启用</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="box_available_add" name="box_available_add">
+                                    <option value="0">关闭</option>
+                                    <option value="1">打开</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="box_icon_url_add" class="col-sm-2 control-label">图标链接</label>
+                            <div class="col-sm-2">
+                                <input type="file" id="iconCreateUpload" onchange="upload_icon_file(this)">
+                            </div>
+                            <div class="col-sm-5">
+
+                            </div>
+                            <div class="p_img_l">
+                                <div id="preview">
+                                    <img id="box_icon_url_add"  src="" width="80px" height="40px"/>
+                                    <span id="box_icon_name_add" hidden></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="boxCreateSubmit">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="orderCreateModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">添加订单</h4><span id="order_add" hidden></span>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="orderCreateForm" role="form">
+
+                        <div class="form-group">
+                            <label for="goods_name_add" class="col-sm-2 control-label">商品名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="goods_name_add" name="goods_name_add" placeholder="必填">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="goods_price_add" class="col-sm-2 control-label">商品价格</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="goods_price_add" name="goods_price_add" placeholder="必填">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="goods_desc_add" class="col-sm-2 control-label">商品描述</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="goods_desc_add" name="goods_desc_add" placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="goods_picture_url_add" class="col-sm-2 control-label">商品图片</label>
+                            <div class="col-sm-2">
+                                <input type="file" id="goodsPictureCreateUpload" onchange="upload_goods_picture_file(this)">
+                            </div>
+                            <div class="col-sm-5">
+
+                            </div>
+                            <div class="p_img_l">
+                                <div id="preview_goods_picture">
+                                    <img id="goods_picture_url_add"  src="" width="100px" height="80px"/>
+                                    <span id="goods_picture_name_add" hidden></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="orderCreateSubmit">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="textCreateModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">添加文本标题</h4><span id="text_add" hidden></span>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="textCreateForm" role="form">
+
+                        <div class="form-group">
+                            <label for="save_type_add" class="col-md-2 control-label">存储类型</label>
+                            <div class="col-md-10">
+                                <select class="form-control" id="save_type_add" name="save_type_add">
+                                    <option value="1" selected>富文本</option>
+                                    <option value="2">文件</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="text_available_add" class="col-md-2 control-label">是否启用</label>
+                            <div class="col-md-10">
+                                <select class="form-control" id="text_available_add" name="text_available_add">
+                                    <option value="0">关闭</option>
+                                    <option value="1">打开</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="file_add_div">
+                            <label for="file_add" class="col-md-2 control-label">文件</label>
+                            <div class="col-md-2">
+                                <input type="file" id="file_add" onchange="upload_file(this)">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="text_name_add" class="col-md-2 control-label">名称</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" id="text_name_add" name="text_name_add" placeholder="必填">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="text_icon_url_add" class="col-md-2 control-label">图标链接</label>
+                            <div class="col-md-2">
+                                <input type="file" id="textIconCreateUpload" onchange="upload_text_icon_file(this)">
+                            </div>
+                            <div class="col-md-5">
+
+                            </div>
+                            <div class="p_img_l">
+                                <div id="preview_text_icon">
+                                    <img id="text_icon_url_add" src="" width="80px" height="40px"/>
+                                    <span id="text_icon_name_add" hidden></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="rich_text_add_div">
+                            <div class="row">
+                                <div class="col-md-7 col-md-offset-1">
+                                    <textarea id="summernote" name="editordata"></textarea>
+                                </div>
+                                <div class="col-md-4" id="article_content">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="textCreateSubmit">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="inlineBoxCreateModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">添加</h4><span id="box_id_add" hidden></span>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="inlineBoxCreateForm" role="form">
+
+                        <div class="form-group">
+                            <label for="inline_box_name_add" class="col-sm-2 control-label">名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inline_box_name_add" name="inline_box_name_add" placeholder="必填">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inline_box_type_add" class="col-sm-2 control-label">类型</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="inline_box_type_add" name="inline_box_type_add">
+                                    <option value="0">订单</option>
+                                    <option value="1">文本</option>
+                                    <option value="2">盒子</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inline_box_priority_add" class="col-sm-2 control-label">优先级</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="inline_box_priority_add" name="inline_box_priority_add">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inline_box_available_add" class="col-sm-2 control-label">是否启用</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="inline_box_available_add" name="inline_box_available_add">
+                                    <option value="0">关闭</option>
+                                    <option value="1">打开</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inline_box_icon_url_add" class="col-sm-2 control-label">图标链接</label>
+                            <div class="col-sm-2">
+                                <input type="file" id="inlineIconCreateUpload" onchange="upload_inline_create_file(this)">
+                            </div>
+                            <div class="col-sm-5">
+
+                            </div>
+                            <div class="p_img_l">
+                                <div id="inline_preview">
+                                    <img id="inline_box_icon_url_add"  src="" width="80px" height="40px"/>
+                                    <span id="inline_box_icon_name_add" hidden></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="inlineBoxCreateSubmit">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</%block>
+
+<%block name="body_media">
+<script src="/mis/static/js/jquery.validate.js" type="text/javascript"></script>
+<script src="/mis/static/js/jquery.validate.messages_cn.js" type="text/javascript"></script>
+<script src="/mis/static/js/jquery.form.js" type="text/javascript"></script>
+<script src="/mis/static/js/bootstrap-typeahead.js" type="text/javascript"></script>
+<script src="/mis/static/js/toastr.js" type="text/javascript"></script>
+<script src="/mis/static/js/md5.min.js" type="text/javascript"></script>
+<script src="/mis/static/js/house/base.js" type="text/javascript"></script>
+<!-- include summernote css/js -->
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+<!--<link href="/mis/static/css/summernote.css" rel="stylesheet">-->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+<!--<script src="/mis/static/js/summernote.min.js"></script>-->
+<!-- include lang -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/lang/summernote-zh-CN.js"></script>
+<!--<script src="/mis/static/js/summernote-zh-CN.js"></script>-->
+<script src="/mis/static/js/house/box_list.js" type="text/javascript"></script>
+</%block>

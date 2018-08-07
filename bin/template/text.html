@@ -1,0 +1,184 @@
+## -*- coding: utf-8 -*-
+<%inherit file="/base.html" />
+<%block name="head_media">
+<link href="/mis/static/css/jquery-confirm.min.css" rel="stylesheet">
+<link href="/mis/static/css/house/define_label_error.css" rel="stylesheet">
+<style>
+    .users_query {
+        padding-left: 15px!important;
+    }
+    .dataTables_length {
+        padding-left: 30px!important;
+    }
+    /*
+    textarea {
+        width: 470px!important;
+        height: 200px!important;
+        max-width: 470px!important;
+        max-height: 200px!important;
+    }
+    */
+    #article_content{
+        width: 280px;
+        height: 400px;
+        max-height: 400px;
+        max-width: 280px;
+        border: 1px solid darkgray;
+        border-radius: 4px;
+        overflow: auto;
+    }
+</style>
+</%block>
+
+<%block name="page">
+
+    <div class="row-fluid">
+        <div class="box span12">
+            <div class="box-header" data-original-title="">
+                <h2><i class="icon-asterisk"></i><span class="break"></span>文本</h2>
+            </div>
+            <div class="box-content">
+                <form class="form-inline text-list-query" id="text_list_query">
+
+                    <div class="form-group">
+                        <label for="box_name">模块名称</label>
+                        <input type="text" class="form-control" id="box_name" name="box_name" placeholder="">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="text_name">名称</label>
+                        <input type="text" class="form-control" id="text_name" name="text_name" placeholder="">
+                    </div>
+
+                    <button type="button" class="btn btn-primary" id="text_search">搜索</button>
+                </form>
+                <label id="query_label_error"></label>
+                <table id="textList" class="display table table-striped table-bordered table-hover dataTable no-footer dtr-inline" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>模块名称</th>
+                        <th>名称</th>
+                        <th>图标</th>
+                        <!--<th>内容</th>-->
+                        <th>是否可用</th>
+                        <th>创建时间</th>
+                        <th>更新时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div><!--/row-->
+
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="textViewModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">查看</h4><span id="text_view" hidden></span>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="textViewForm" role="form">
+
+                        <div class="form-group">
+                            <label for="save_type_view" class="col-md-2 control-label">存储类型</label>
+                            <div class="col-md-10">
+                                <select class="form-control" id="save_type_view" name="save_type_view">
+                                    <option value="1">富文本</option>
+                                    <option value="2">文件</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="text_available_view" class="col-sm-2 control-label">是否启用</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="text_available_view" name="text_available_view">
+                                    <option value="0">关闭</option>
+                                    <option value="1">打开</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="text_name_view" class="col-sm-2 control-label">名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="text_name_view" name="text_name_view" placeholder="必填">
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="file_view_div">
+                            <label for="file_view" class="col-md-2 control-label">文件</label>
+                            <div class="col-md-2">
+                                <input type="file" id="file_view" onchange="upload_file(this)">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="text_icon_url_view" class="col-sm-2 control-label">图标链接</label>
+                            <div class="col-sm-2">
+                                <input type="file" id="textIconViewUpload" onchange="upload_text_icon_view(this)">
+                            </div>
+                            <div class="col-sm-5">
+
+                            </div>
+                            <div class="p_img_l">
+                                <div id="preview_text_icon">
+                                    <img id="text_icon_url_view"  src="" width="80px" height="40px"/>
+                                    <span id="text_icon_name_view" hidden></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group" id="rich_text_view_div">
+                            <!--
+                            <label for="text_content_view" class="col-sm-2 control-label">内容</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="text_content_view" name="text_content_view" placeholder="必填"></textarea>
+                            </div>
+                            -->
+                            <div class="row">
+                                <div class="col-md-7 col-md-offset-1">
+                                    <textarea id="summernote" name="editordata"></textarea>
+                                </div>
+                                <div class="col-md-4" id="article_content">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="textViewSubmit">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</%block>
+
+<%block name="body_media">
+<script src="/mis/static/js/jquery.validate.js" type="text/javascript"></script>
+<script src="/mis/static/js/jquery.validate.messages_cn.js" type="text/javascript"></script>
+<script src="/mis/static/js/jquery.form.js" type="text/javascript"></script>
+<script src="/mis/static/js/bootstrap-typeahead.js" type="text/javascript"></script>
+<script src="/mis/static/js/toastr.js" type="text/javascript"></script>
+<script src="/mis/static/js/md5.min.js" type="text/javascript"></script>
+<script src="/mis/static/js/jquery-confirm.min.js" type="text/javascript"></script>
+<script src="/mis/static/js/house/base.js" type="text/javascript"></script>
+<!-- include summernote css/js -->
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+<!-- include lang -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/lang/summernote-zh-CN.js"></script>
+<!--<link href="/mis/static/css/summernote.css" rel="stylesheet">-->
+<!--<script src="/mis/static/js/summernote.min.js"></script>-->
+<!--<script src="/mis/static/js/summernote-zh-CN.js"></script>-->
+<script src="/mis/static/js/house/text.js" type="text/javascript"></script>
+</%block>

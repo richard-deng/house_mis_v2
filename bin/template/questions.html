@@ -1,0 +1,194 @@
+## -*- coding: utf-8 -*-
+<%inherit file="/base.html" />
+<%block name="head_media">
+<link href="/mis/static/css/house/define_label_error.css" rel="stylesheet">
+<link href="/mis/static/css/jquery-confirm.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/mis/static/css/themes/default/style.min.css" />
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+
+</%block>
+
+
+<%block name="page">
+    <div class="row-fluid">
+        <div class="box span12">
+            <div class="box-header" data-original-title="">
+                <h2><i class="icon-asterisk"></i><span class="break"></span>问答</h2>
+            </div>
+            <div class="box-content">
+                <div class="row" style="margin-left: 5px; margin-bottom: 10px">
+                    <button type="button" class="btn btn-info" id="do_add_root_question">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加根问题
+                    </button>
+                </div>
+                <div class="row" style="margin-left: 5px" id="container"></div>
+            </div>
+        </div>
+    </div><!--/row-->
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="addRootQuestionModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">添加根问题</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="addRootQuestionCreateForm" role="form">
+                        <div class="form-group">
+                            <label for="root_question_add" class="col-md-2 control-label">根问题</label>
+                            <div class="col-md-10">
+                                <textarea rows="10" cols="30" class="form-control" id="root_question_add" name="root_question_add" placeholder="必填"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="rootQuestionCreateSubmit">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="addQuestionModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">添加</h4><span id="normal_question_parent" hidden></span><span id="normal_question_category" hidden></span>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="addQuestionCreateForm" role="form">
+
+                        <div class="form-group">
+                            <label for="save_type_add" class="col-md-2 control-label">存储类型</label>
+                            <div class="col-md-10">
+                                <select class="form-control" id="save_type_add" name="save_type_add">
+                                    <option value="1" selected>普通文本</option>
+                                    <option value="2">富文本</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="normal_text_add_div">
+                            <label for="question_add" class="col-sm-2 control-label" id="normal_question_title">问题</label>
+                            <div class="col-sm-10">
+                                <textarea rows="10" cols="30" class="form-control" id="question_add" name="question_add" placeholder="必填"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="rich_text_add_div">
+                            <div class="row">
+                                <div class="col-sm-10 col-sm-offset-2">
+                                    <textarea id="summernote" name="editordata"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="questionCreateSubmit">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="addDescModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">添加描述</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="addDescCreateForm" role="form">
+                        <div class="form-group">
+                            <label for="desc_add" class="col-sm-2 control-label">描述</label>
+                            <div class="col-sm-10">
+                                <textarea rows="10" cols="30" class="form-control" id="desc_add" name="desc_add" placeholder="必填"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="descCreateSubmit">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="addAnswerModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">添加答案</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="addAnswerCreateForm" role="form">
+                        <div class="form-group">
+                            <label for="root_question_add" class="col-sm-2 control-label">答案</label>
+                            <div class="col-sm-10">
+                                <textarea rows="10" cols="30" class="form-control" id="answer_add" name="answer_add" placeholder="必填"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="answerCreateSubmit">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="renameModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">修改</h4><span id="modify_question_id" hidden></span><span id="modify_save_type" hidden></span>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="renameForm" role="form">
+                        <div class="form-group" id="rename_view_div">
+                            <label for="rename" class="col-sm-2 control-label">修改</label>
+                            <div class="col-sm-10">
+                                <textarea rows="10" cols="30" class="form-control" id="rename" name="rename" placeholder="必填"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="rich_text_view_div">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <textarea id="summernote_view" name="editordata"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="renameSubmit">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</%block>
+
+<%block name="body_media">
+<script src="/mis/static/js/jquery.validate.js" type="text/javascript"></script>
+<script src="/mis/static/js/jquery.validate.messages_cn.js" type="text/javascript"></script>
+<script src="/mis/static/js/jquery.form.js" type="text/javascript"></script>
+<script src="/mis/static/js/jstree.min.js"></script>
+<script src="/mis/static/js/jquery-confirm.min.js" type="text/javascript"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/lang/summernote-zh-CN.js"></script>
+<script src="/mis/static/js/house/questions.js" type="text/javascript"></script>
+</%block>

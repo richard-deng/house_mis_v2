@@ -1,0 +1,176 @@
+## -*- coding: utf-8 -*-
+<%inherit file="/base.html" />
+<%block name="head_media">
+<link href="/mis/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="/mis/static/css/house/define_label_error.css" rel="stylesheet">
+
+<style>
+    .box_list_query {
+        padding-left: 15px!important;
+    }
+    .dataTables_length {
+        padding-left: 30px!important;
+    }
+    textarea {
+        width: 500px!important;
+        height: 400px!important;
+        max-width: 500px!important;
+        max-height: 400px!important;
+    }
+    #article_content{
+        width: 280px;
+        height: 400px;
+        max-height: 400px;
+        max-width: 280px;
+        border: 1px solid darkgray;
+        border-radius: 4px;
+        overflow: auto;
+    }
+</style>
+</%block>
+
+<%block name="page">
+    <div class="row-fluid">
+        <div class="box span12">
+            <div class="box-header" data-original-title="">
+                <h2><i class="icon-asterisk"></i><span class="break"></span>交易</h2>
+            </div>
+            <div class="box-content">
+                <form class="form-inline trade_query" id="trade_query">
+
+                    <div class="form-group">
+                        <label for="s_syssn">流水号</label>
+                        <input type="text" class="form-control" id="s_syssn" name="s_syssn" placeholder="">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="s_consumer_mobile">消费者电话</label>
+                        <input type="text" class="form-control" id="s_consumer_mobile" name="s_consumer_mobile" placeholder="">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="s_consumer_name">消费者名称</label>
+                        <input type="text" class="form-control" id="s_consumer_name" name="s_consumer_name" placeholder="">
+                    </div>
+
+                    <div class="datetimepicker-container" style="margin-top: 12px;">
+                        <span>时间</span>
+                        <div class="form-group">
+                            <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="start_time" data-link-format="yyyy-mm-dd hh:ii:ss" id="datetimepicker1">
+                                <input class="form-control sea_date" type="text" value="" readonly="">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                            </div>
+                            <input type="hidden" id="start_time" value=""><br>
+                        </div>
+                        <span> - </span>
+                        <div class="form-group">
+                            <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="end_time" data-link-format="yyyy-mm-dd hh:ii:ss" id="datetimepicker2">
+                                <input class="form-control sea_date" type="text" value="" readonly="">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                            </div>
+                            <input type="hidden" id="end_time" value=""><br>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" id="tradeSearch">搜索</button>
+                        </div>
+                    </div>
+
+
+                </form>
+                <label id="query_label_error"></label>
+                <table id="tradeList" class="display table table-striped table-bordered table-hover dataTable no-footer dtr-inline" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <!--
+                        <th>OPENID</th>
+                        -->
+                        <th>消费者名称</th>
+                        <th>微信手机号</th>
+                        <th>订单名称</th>
+                        <th>流水号</th>
+                        <th>返回码</th>
+                        <th>取消状态</th>
+                        <th>金额</th>
+                        <th>原交易流水号</th>
+                        <th>错误描述</th>
+                        <th>系统时间</th>
+                        <th>完成时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="tradelist-details" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="tradelist_details-head"></h4>
+                </div>
+                <div class="modal-body" id="details_list">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</%block>
+
+
+<%block name="body_media">
+<script src="/mis/static/js/jquery.validate.js" type="text/javascript"></script>
+<script src="/mis/static/js/jquery.validate.messages_cn.js" type="text/javascript"></script>
+<script src="/mis/static/js/jquery.form.js" type="text/javascript"></script>
+<script src="/mis/static/js/bootstrap-typeahead.js" type="text/javascript"></script>
+<script src="/mis/static/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+<script src="/mis/static/js/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
+<script src="/mis/static/js/toastr.js" type="text/javascript"></script>
+<script src="/mis/static/js/md5.min.js" type="text/javascript"></script>
+<script src="/mis/static/js/house/base.js" type="text/javascript"></script>
+<script src="/mis/static/js/house/trade_order.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $('.form_date').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 0,
+        forceParse: 0,
+        minuteStep: 1,
+        icons:{
+            time: "fa fa-clock-o",
+            date: "fa fa-calendar",
+            up: "fa fa-arrow-up",
+            down: "fa fa-arrow-down"
+        },
+        sideBySide: true
+    });
+    $(".form_date input.sea_date").on({
+        'mouseenter': function() {
+            $(this).attr('readonly', 'readonly');
+        },
+        'mouseleave': function() {
+            $(this).removeAttr('readonly');
+        }
+    });
+
+    $("#datetimepicker1").datetimepicker().on('changeDate', function(e){
+        $("#datetimepicker2").datetimepicker('setStartDate', e.date);
+    });
+
+    $("#datetimepicker2").datetimepicker().on('changeDate', function(e){
+        $("#datetimepicker1").datetimepicker('setEndDate', e.date);
+    });
+
+</script>
+
+</%block>
