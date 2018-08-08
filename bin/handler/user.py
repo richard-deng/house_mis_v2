@@ -12,7 +12,10 @@ from constant import INVALID_VALUE
 from zbase.base.dbpool import with_database
 from house_base.response import error, success, RESP_CODE
 from house_base.session import house_check_session
-from house_base.define import (HOUSE_USER_STATE_MAP, TOKEN_HOUSE_CORE, HOUSE_USER_TYPE_MAP)
+from house_base.define import (
+    HOUSE_USER_STATE_MAP, TOKEN_HOUSE_CORE,
+    HOUSE_USER_TYPE_MAP, HOUSE_USER_STATE_OK
+)
 from zbase.web.validator import (
     with_validator_self, Field, T_INT, T_STR
 )
@@ -31,7 +34,7 @@ class UserListHandler(BaseHandler):
 
     @with_database(TOKEN_HOUSE_CORE)
     def _query_handler(self, page, page_size, mobile=None, user_id=None):
-        where = {}
+        where = {'state': HOUSE_USER_STATE_OK}
         other = ''
         on = {'auth_user.id': 'profile.userid'}
         if mobile not in INVALID_VALUE:

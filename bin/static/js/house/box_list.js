@@ -649,13 +649,14 @@ $(document).ready(function(){
     });
 
     $('#summernote').summernote({
-        minHeight: 320,
+        minHeight: 500,
         // maxHeight: 320,
         minWidth: 512,
         // maxWidth: 512,
-        focus: true,
+        focus: false,
         lang: 'zh-CN',
         dialogsInBody: true,
+        placeholder: '请填写',
         toolbar: [
             // [groupName, [list of button]]
             ['style', ['bold', 'italic', 'underline', 'clear']],

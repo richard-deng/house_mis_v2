@@ -27,6 +27,11 @@
         border-radius: 4px;
         overflow: auto;
     }
+    .note-editor.note-frame .note-editing-area .note-codable {
+        display: inline!important;
+        padding: 0px!important;
+        background-color: #fff!important;
+    }
 </style>
 </%block>
 
@@ -143,7 +148,8 @@
                             -->
                             <div class="row">
                                 <div class="col-md-7 col-md-offset-1">
-                                    <textarea id="summernote" name="editordata"></textarea>
+                                    <!--<textarea id="summernote" name="editordata"></textarea>-->
+                                    <div id="summernote" class="form-group"></div>
                                 </div>
                                 <div class="col-md-4" id="article_content">
 

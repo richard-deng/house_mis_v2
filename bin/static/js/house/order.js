@@ -77,7 +77,8 @@ $(document).ready(function () {
             {
                 targets: 4,
                 render: function (data, type, full) {
-                    return '<a href=' + data + '>' + data + '</a>';
+                    // return '<a href=' + data + '>' + data + '</a>';
+                    return '<img src=' + data +  ' width="30px" height="30px"/>';
                 }
 
             },

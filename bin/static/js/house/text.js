@@ -356,23 +356,23 @@ $(document).ready(function () {
 
     $('#summernote').summernote({
         // minHeight: 320,
-        minHeight: 420,
+        minHeight: 500,
         // maxHeight: 320,
-        minWidth: 512,
+        minWidth: 550,
         // maxWidth: 512,
-        focus: true,
+        focus: false,
         lang: 'zh-CN',
         dialogsInBody: true,
-
+        placeholder: '请填写',
         toolbar: [
             // [groupName, [list of button]]
             ['style', ['bold', 'italic', 'underline', 'clear']],
-            ['font', ['strikethrough', 'superscript', 'subscript']],
+            //['font', ['strikethrough', 'superscript', 'subscript']],
             ['fontsize', ['fontsize']],
             ['color', ['color']],
             ['insert', ['picture', 'link']],
             ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']]
+            // ['height', ['height']]
         ],
 
         callbacks: {

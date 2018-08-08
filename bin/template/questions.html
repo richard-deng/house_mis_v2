@@ -9,6 +9,11 @@
     .question_summer_note {
         padding-left: 40px; padding-right: 30px; padding-top: 30px;
     }
+    .note-editor.note-frame .note-editing-area .note-codable {
+        display: block!important;
+        padding: 0px!important;
+        background-color: #fff!important;
+    }
 </style>
 </%block>
 
@@ -85,7 +90,8 @@
                         <div class="form-group" id="rich_text_add_div">
                             <div class="row">
                                 <div class="col-sm-10 col-sm-offset-2 question_summer_note">
-                                    <textarea id="summernote" name="editordata"></textarea>
+                                    <!--<textarea id="summernote" name="editordata"></textarea>-->
+                                    <div class="form-group" id="summernote"></div>
                                 </div>
                             </div>
                         </div>
@@ -170,7 +176,8 @@
                         <div class="form-group" id="rich_text_view_div">
                             <div class="row">
                                 <div class="col-sm-12 question_summer_note">
-                                    <textarea id="summernote_view" name="editordata"></textarea>
+                                    <!--<textarea id="summernote_view" name="editordata"></textarea>-->
+                                    <div class="form-group" id="summernote_view"></div>
                                 </div>
                             </div>
                         </div>
