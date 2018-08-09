@@ -649,14 +649,14 @@ $(document).ready(function(){
     });
 
     $('#summernote').summernote({
-        minHeight: 500,
-        // maxHeight: 320,
+        minHeight: 350,
+        maxHeight: 350,
         minWidth: 512,
         // maxWidth: 512,
-        focus: false,
+        focus: true,
         lang: 'zh-CN',
         dialogsInBody: true,
-        placeholder: '请填写',
+        // placeholder: '请填写',
         toolbar: [
             // [groupName, [list of button]]
             ['style', ['bold', 'italic', 'underline', 'clear']],
@@ -702,6 +702,27 @@ $(document).ready(function(){
         $('#article_content').html(content);
         $('#article_content').show();
     });
+
+    /*
+    $('#summernote').on('summernote.focus', function() {
+        $('.note-editing-area').css('top', '36px');
+        console.log('Editable area is focused');
+    });
+
+
+    $('#summernote').on('summernote.init', function() {
+        $('.note-editing-area').css('top', '36px');
+        console.log('Summernote is launched');
+    });
+
+
+    $('#summernote').on('summernote.blur', function() {
+        $('.note-editing-area').css('top', '0px');
+        console.log('Editable area loses focus');
+    });
+    */
+
+
 
     $('#inlineBoxCreateSubmit').click(function () {
         var inline_box_create_vt = $('#inlineBoxCreateForm').validate({
