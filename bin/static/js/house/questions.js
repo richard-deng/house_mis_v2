@@ -90,7 +90,7 @@ $(document).ready(function () {
                             $('#save_type_add').attr("disabled", true);
                             $('#normal_text_add_div').show();
                         }
-
+                        $("#summernote").summernote('code', '');
                         $("#addQuestionModal").modal();
                         /*
                         inst.create_node(obj, {}, "last", function (new_node) {
@@ -342,7 +342,7 @@ $(document).ready(function () {
                 rules: {
                     question_add: {
                         required: true,
-                        maxlength: 200
+                        maxlength: 6000
                     }
                 },
                 messages: {
@@ -415,7 +415,7 @@ $(document).ready(function () {
             rules: {
                 answer_add: {
                     required: true,
-                    maxlength: 200
+                    maxlength: 6000
                 }
             },
             messages: {
@@ -529,7 +529,7 @@ $(document).ready(function () {
                 rules: {
                     rename: {
                         required: true,
-                        maxlength: 200
+                        maxlength: 6000
                     }
                 },
                 messages: {
@@ -606,7 +606,7 @@ $(document).ready(function () {
             rules: {
                 desc_add: {
                     required: true,
-                    maxlength: 200
+                    maxlength: 6000
                 }
             },
             messages: {
@@ -658,10 +658,10 @@ $(document).ready(function () {
     });
 
     $('#summernote').summernote({
-        minHeight: 420,
-        // maxHeight: 320,
-        // minWidth: 512,
-        // maxWidth: 512,
+        minHeight: 460,
+        maxHeight: 460,
+        minWidth: 710,
+        maxWidth: 710,
         focus: false,
         lang: 'zh-CN',
         dialogsInBody: true,
@@ -710,10 +710,10 @@ $(document).ready(function () {
 
 
     $('#summernote_view').summernote({
-        minHeight: 420,
-        // maxHeight: 320,
-        // minWidth: 512,
-        // maxWidth: 512,
+        minHeight: 460,
+        maxHeight: 460,
+        minWidth: 710,
+        maxWidth: 710,
         focus: false,
         lang: 'zh-CN',
         dialogsInBody: true,

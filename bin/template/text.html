@@ -28,9 +28,17 @@
         overflow: auto;
     }
     .note-editor.note-frame .note-editing-area .note-codable {
-        display: inline!important;
+        display: none!important;
         padding: 0px!important;
         background-color: #fff!important;
+    }
+    .note-editor.note-frame .note-editing-area .note-editable {
+        padding: 20px!important;
+        overflow: auto;
+        color: #000;
+        word-wrap: break-word;
+        background-color: #fff;
+        margin-top:20px!important;
     }
 </style>
 </%block>
@@ -64,6 +72,7 @@
                         <th>模块名称</th>
                         <th>名称</th>
                         <th>图标</th>
+                        <th>优先级</th>
                         <!--<th>内容</th>-->
                         <th>是否可用</th>
                         <th>创建时间</th>
@@ -94,6 +103,24 @@
                                 <select class="form-control" id="save_type_view" name="save_type_view">
                                     <option value="1">富文本</option>
                                     <option value="2">文件</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="text_priority_view" class="col-sm-2 control-label">优先级</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="text_priority_view" name="text_priority_view">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
                                 </select>
                             </div>
                         </div>

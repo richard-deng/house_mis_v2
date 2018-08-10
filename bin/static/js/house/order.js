@@ -117,6 +117,8 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '.viewEdit', function(){
+        $(".filename").text("没有选择文件");
+        $(".action").text("选择文件");
         $("label.error").remove();
         var se_userid = window.localStorage.getItem('myid');
         var order_id = $(this).data('order_id');

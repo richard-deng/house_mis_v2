@@ -126,6 +126,8 @@ $(document).ready(function () {
     });
 
     $('#carousel_create').click(function(){
+        $(".filename").text("没有选择文件");
+        $(".action").text("选择文件");
         $('#carouselCreateForm').resetForm();
         $("#carousel_icon_url_add").attr('src', '').hide();
         $("label.error").remove();
@@ -213,6 +215,8 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '.viewEdit', function(){
+        $(".filename").text("没有选择文件");
+        $(".action").text("选择文件");
         $("label.error").remove();
         var se_userid = window.localStorage.getItem('myid');
         var carousel_id = $(this).data('carousel_id');
