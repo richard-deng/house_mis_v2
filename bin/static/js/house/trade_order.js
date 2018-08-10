@@ -96,7 +96,7 @@ $(document).ready(function () {
         },
         'columnDefs': [
             {
-                targets: 11,
+                targets: 10,
                 data: '操作',
                 render: function(data, type, full) {
                     var syssn =full.syssn;
@@ -114,7 +114,7 @@ $(document).ready(function () {
             { data: 'retcd'},
             { data: 'cancel'},
             { data: 'txamt'},
-            { data: 'origssn'},
+            //{ data: 'origssn'},
             { data: 'err_desc'},
             { data: 'sysdtm'},
             { data: 'paydtm'}

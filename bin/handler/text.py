@@ -30,6 +30,7 @@ class TextInfoCreateHandler(BaseHandler):
         Field('icon', T_STR, False),
         Field('available', T_INT, False),
         Field('save_type', T_INT, False),
+        Field('priority', T_INT, False),
     ]
 
     @house_check_session(g_rt.redis_pool, cookie_conf)
@@ -125,6 +126,7 @@ class TextInfoViewHandler(BaseHandler):
         Field('icon', T_STR, False),
         Field('available', T_INT, False),
         Field('save_type', T_INT, False),
+        Field('priority', T_INT, False),
     ]
 
     @house_check_session(g_rt.redis_pool, cookie_conf)
@@ -211,8 +213,10 @@ class TextInfoDeleteHandler(BaseHandler):
         text.load()
         if not text.data:
             return error(RESP_CODE.DATAERR)
-        delete_values = {'available': define.TEXT_TITLE_DISABLE}
-        ret = text.update(delete_values)
-        if ret != 1:
-            return error(RESP_CODE.DBERR)
+        log.info("text_id=%s|data=%s delete", text_id, text.data)
+        # delete_values = {'available': define.TEXT_TITLE_DISABLE}
+        # ret = text.update(delete_values)
+        # if ret != 1:
+        #     return error(RESP_CODE.DBERR)
+        text.delete() 
         return success(data={})

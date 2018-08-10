@@ -88,17 +88,10 @@ $(document).ready(function(){
                 targets: 4,
                 data: '操作',
                 render: function(data, type, full) {
-                    var msg = '';
-                    var new_status = '';
+                    var msg = '删除';
+                    var new_status = 1;
                     var banner_id = full.id;
                     var status = full.status;
-                    if(status === 0){
-                        msg = '关闭';
-                        new_status = 1;
-                    } else {
-                        msg = '打开';
-                        new_status = 0;
-                    }
                     var view = "<button type='button' class='btn btn-info btn-sm viewEdit' data-banner_id="+banner_id+">"+'编辑'+"</button>";
                     var del ="<button type='button' class='btn btn-warning btn-sm deleteBanner' data-banner_id="+banner_id+ ' data-new_status='+ new_status +">"+msg+"</button>";
                     return view + del;
@@ -225,7 +218,7 @@ $(document).ready(function(){
             rules: {
                 banner_title_view: {
                     required: true,
-                    maxlength: 32
+                    maxlength: 256
                 }
             },
             messages: {
@@ -291,12 +284,13 @@ $(document).ready(function(){
 
     $('#content_view').summernote({
         minHeight: 420,
-        // maxHeight: 320,
-        // minWidth: 512,
-        // maxWidth: 512,
-        focus: true,
+        maxHeight: 420,
+        minWidth: 870,
+        maxWidth: 870,
+        focus: false,
         lang: 'zh-CN',
         dialogsInBody: true,
+        placeholder: '请填写',
         toolbar: [
             // [groupName, [list of button]]
             ['style', ['bold', 'italic', 'underline', 'clear']],
@@ -341,12 +335,13 @@ $(document).ready(function(){
 
     $('#content_create').summernote({
         minHeight: 420,
-        // maxHeight: 320,
-        // minWidth: 512,
-        // maxWidth: 512,
+        maxHeight: 420,
+        minWidth: 870,
+        maxWidth: 870,
         focus: true,
         lang: 'zh-CN',
         dialogsInBody: true,
+        placeholder: '请填写',
         toolbar: [
             // [groupName, [list of button]]
             ['style', ['bold', 'italic', 'underline', 'clear']],
@@ -392,6 +387,7 @@ $(document).ready(function(){
     $('#banner_create').click(function () {
         $('#bannerCreateForm').resetForm();
         $("label.error").remove();
+        $("#content_create").summernote('code', '');
         $('#bannerCreateModal').modal();
     });
 
@@ -400,7 +396,7 @@ $(document).ready(function(){
             rules: {
                 banner_title_create: {
                     required: true,
-                    maxlength: 32
+                    maxlength: 256
                 }
             },
             messages: {

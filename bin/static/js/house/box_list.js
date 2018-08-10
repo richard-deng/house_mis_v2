@@ -179,13 +179,18 @@ $(document).ready(function(){
         }
     });
 
+    $('#boxList').on('length.dt', function(e, settings, len){
+        $("#box_parent").text(-1);
+        console.log("New page lenght: ", len);
+    });
+
     $("#box_search").click(function(){
         $("#box_parent").text(-1);
         var box_query_vt = $('#box_list_query').validate({
             rules: {
                 box_name: {
                     required: false,
-                    maxlength: 32
+                    maxlength: 128
                 }
             },
             messages: {
@@ -210,6 +215,8 @@ $(document).ready(function(){
 
     $(document).on('click', '.viewEdit', function(){
         $("label.error").remove();
+        $(".filename").text("没有选择文件");
+        $(".action").text("选择文件");
         var se_userid = window.localStorage.getItem('myid');
         var box_id = $(this).data('box_id');
         $('#view_box_id').text(box_id);
@@ -270,7 +277,7 @@ $(document).ready(function(){
             rules: {
                 box_name_view: {
                     required: true,
-                    maxlength: 32
+                    maxlength: 128
                 },
                 box_priority_view: {
                     required: false,
@@ -351,6 +358,8 @@ $(document).ready(function(){
         $('#boxCreateForm').resetForm();
         $("#box_icon_url_add").attr('src', '').hide();
         $("label.error").remove();
+        $(".filename").text("没有选择文件");
+        $(".action").text("选择文件");
         $('#boxCreateModal').modal();
     });
 
@@ -360,7 +369,7 @@ $(document).ready(function(){
             rules: {
                 box_name_add: {
                     required: true,
-                    maxlength: 32
+                    maxlength: 128
                 },
                 box_priority_add: {
                     required: false,
@@ -439,6 +448,8 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '.addBox', function(){
+        $(".filename").text("没有选择文件");
+        $(".action").text("选择文件");
         var box_id = $(this).data('box_id');
         var box_type = $(this).data('box_type');
         console.log('box_id=', box_id, 'box_type=', box_type);
@@ -476,7 +487,7 @@ $(document).ready(function(){
             rules: {
                 goods_name_add: {
                     required: true,
-                    maxlength: 32
+                    maxlength: 128
                 },
                 goods_price_add: {
                     required: false,
@@ -565,7 +576,7 @@ $(document).ready(function(){
             rules: {
                 text_name_add: {
                     required: true,
-                    maxlength: 32
+                    maxlength: 128
                 },
                 /*
                 text_content_add: {
@@ -612,6 +623,7 @@ $(document).ready(function(){
         post_data.box_id = $('#text_add').text();
         post_data.name = $("#text_name_add").val();
         post_data.save_type = $("#save_type_add").val();
+        post_data.priority = $("#text_priority_add").val();
         //post_data.content = $('#text_content_add').val();
         if(post_data.save_type === "1") {
             post_data.content = $('#summernote').summernote('code');
@@ -649,13 +661,14 @@ $(document).ready(function(){
     });
 
     $('#summernote').summernote({
-        minHeight: 320,
-        // maxHeight: 320,
+        minHeight: 350,
+        maxHeight: 350,
         minWidth: 512,
         // maxWidth: 512,
         focus: true,
         lang: 'zh-CN',
         dialogsInBody: true,
+        // placeholder: '请填写',
         toolbar: [
             // [groupName, [list of button]]
             ['style', ['bold', 'italic', 'underline', 'clear']],
@@ -702,12 +715,33 @@ $(document).ready(function(){
         $('#article_content').show();
     });
 
+    /*
+    $('#summernote').on('summernote.focus', function() {
+        $('.note-editing-area').css('top', '36px');
+        console.log('Editable area is focused');
+    });
+
+
+    $('#summernote').on('summernote.init', function() {
+        $('.note-editing-area').css('top', '36px');
+        console.log('Summernote is launched');
+    });
+
+
+    $('#summernote').on('summernote.blur', function() {
+        $('.note-editing-area').css('top', '0px');
+        console.log('Editable area loses focus');
+    });
+    */
+
+
+
     $('#inlineBoxCreateSubmit').click(function () {
         var inline_box_create_vt = $('#inlineBoxCreateForm').validate({
             rules: {
                 inline_box_name_add: {
                     required: true,
-                    maxlength: 32
+                    maxlength: 128
                 },
                 inline_box_priority_add: {
                     required: false,

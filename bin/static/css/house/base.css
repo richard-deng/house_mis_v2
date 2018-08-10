@@ -15,3 +15,10 @@ textarea.form-control {
     resize: none;
 }
 
+/*
+.note-editor.note-frame .note-editing-area .note-codable {
+    display: block!important;
+    padding: 0px!important;
+    background-color: #fff!important;
+}
+*/

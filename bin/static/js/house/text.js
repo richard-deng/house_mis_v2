@@ -89,7 +89,7 @@ $(document).ready(function () {
 
             },
             {
-                targets: 3,
+                targets: 4,
                 render: function (data, type, full) {
                     if (data === 1) {
                         return '启用'
@@ -99,7 +99,7 @@ $(document).ready(function () {
                 }
             },
             {
-                targets: 6,
+                targets: 7,
                 data: '操作',
                 render: function(data, type, full) {
                     var text_id = full.id;
@@ -113,6 +113,7 @@ $(document).ready(function () {
             { data: 'box_name'},
             { data: 'name'},
             { data: 'icon'},
+            { data: 'priority'},
             //{ data: 'content'},
             { data: 'available'},
             { data: 'ctime'},
@@ -134,6 +135,8 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '.viewEdit', function(){
+        $(".filename").text("没有选择文件");
+        $(".action").text("选择文件");
         $("label.error").remove();
         var se_userid = window.localStorage.getItem('myid');
         var text_id = $(this).data('text_id');
@@ -164,6 +167,7 @@ $(document).ready(function () {
                     var save_type = text_data.save_type;
                     console.log("save_type ", save_type);
                     $("#save_type_view").val(save_type);
+                    $("#text_priority_view").val(text_data.priority);
                     $('#text_name_view').val(text_data.name);
                     //$('#text_content_view').val(text_data.content);
                     if(save_type === 1){
@@ -238,6 +242,7 @@ $(document).ready(function () {
         post_data.text_id = $('#text_view').text();
         post_data.name = $("#text_name_view").val();
         post_data.save_type = $("#save_type_view").val();
+        post_data.priority = $("#text_priority_view").val();
         //post_data.content = $('#text_content_view').val();
         if(post_data.save_type === "1"){
             post_data.content = $('#summernote').summernote('code');
@@ -355,24 +360,23 @@ $(document).ready(function () {
     });
 
     $('#summernote').summernote({
-        // minHeight: 320,
-        minHeight: 420,
-        // maxHeight: 320,
-        minWidth: 512,
+        minHeight: 350,
+        maxHeight: 350,
+        minWidth: 550,
         // maxWidth: 512,
-        focus: true,
+        focus: false,
         lang: 'zh-CN',
         dialogsInBody: true,
-
+        placeholder: '请填写',
         toolbar: [
             // [groupName, [list of button]]
             ['style', ['bold', 'italic', 'underline', 'clear']],
-            ['font', ['strikethrough', 'superscript', 'subscript']],
+            //['font', ['strikethrough', 'superscript', 'subscript']],
             ['fontsize', ['fontsize']],
             ['color', ['color']],
             ['insert', ['picture', 'link']],
             ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']]
+            // ['height', ['height']]
         ],
 
         callbacks: {

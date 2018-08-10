@@ -62,7 +62,8 @@ class RateViewHandler(BaseHandler):
 
     _post_handler_fields = [
         Field('rate_id', T_INT, False),
-        Field('rate', T_FLOAT, False)
+        Field('rate', T_FLOAT, False),
+        Field('name', T_STR, False),
     ]
 
     _get_handler_fields = [

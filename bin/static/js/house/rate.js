@@ -183,12 +183,20 @@ $(document).ready(function () {
     $('#rateViewSubmit').click(function () {
         var rate_view_vt = $('#rateViewForm').validate({
             rules: {
+                name_view: {
+                    required: true,
+                    maxlength: 30
+                },
                 rate_view: {
                     required: true,
                     isValidRate: '#rate_view'
                 }
             },
             messages: {
+                name_view: {
+                    required: '请输入名称',
+                    maxlength: $.validator.format("请输入一个 长度最多是 {0} 的字符串")
+                },
                 rate_view: {
                     required: '请输入利率'
                 }
@@ -213,6 +221,7 @@ $(document).ready(function () {
         post_data.se_userid = se_userid;
         post_data.rate_id = $('#view_rate_id').text();
         post_data.rate = $('#rate_view').val();
+        post_data.name = $('#name_view').val();
 
         $.ajax({
             url: '/mis/v1/api/rate/view',
