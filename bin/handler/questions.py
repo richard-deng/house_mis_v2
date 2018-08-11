@@ -106,7 +106,7 @@ class QuestionViewHandler(BaseHandler):
         status = params.pop('status')
         name = params.pop('name')
         content = self.req.input().get('content')
-        if status:
+        if status in define.QUESTION_ALL:
             values['status'] = status
         if name:
             values['name'] = name

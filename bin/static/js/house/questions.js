@@ -63,123 +63,15 @@ $(document).ready(function () {
         //"plugins" : ["dnd", "contextmenu", "changed", "types"],
         "plugins" : ["changed", "types", "contextmenu"],
         "contextmenu":{
-            "items":{
-                "添加":{
-                    "label": "添加",
-                    "icon": "glyphicon glyphicon-plus",
-                    "action": function(data){
-                        var inst = $.jstree.reference(data.reference);
-                        var obj = inst.get_node(data.reference);
-                        var parent = obj.id;
-                        console.log('obj=', obj);
-                        parent_category = obj.original.category;
-                        save_type = obj.original.save_type;
-                        if(save_type == 2){
-                            toastr.warning('富文本叶子节点不能再添加');
-                            return false;
-                        }
-                        var title = parent_category == 2 ? '问题' : '答案';
-                        $("#normal_question_title").text(title);
-                        $("#normal_question_parent").text(parent);
-                        $("#normal_question_category").text(obj.original.category);
-                        $('#addQuestionCreateForm').resetForm();
-                        $("label.error").remove();
-                        // 添加时默认的是普通文本
-                        $('#rich_text_add_div').hide();
-                        if(obj.original.category === 2){
-                            $('#save_type_add').attr("disabled", true);
-                            $('#normal_text_add_div').show();
-                        }
-                        $("#summernote").summernote('code', '');
-                        $("#addQuestionModal").modal();
-                        /*
-                        inst.create_node(obj, {}, "last", function (new_node) {
-                            console.log('new_node=', new_node);
-                            var parent = new_node.parent;
-                            $("#normal_question_parent").text(parent);
-                            $("#normal_question_category").text(obj.original.category);
-                            $('#addQuestionCreateForm').resetForm();
-                            $("label.error").remove();
-                            $("#addQuestionModal").modal();
-                        });
-                        */
-                    }
-                },
-                "修改":{
-                    "separator_before"  : false,
-                    "separator_after"   : false,
-                    "_disabled"         : false, //(this.check("rename_node", data.reference, this.get_parent(data.reference), "")),
-                    "label"             : "修改",
-                    "shortcut_label"    : 'F2',
-                    "icon"              : "glyphicon glyphicon-leaf",
-                    "action"            : function (data) {
-                        var inst = $.jstree.reference(data.reference);
-                        var obj = inst.get_node(data.reference);
-                        console.log('modify obj:', obj);
-                        var question_id = obj.id;
-                        $("#modify_question_id").text(question_id);
-                        var save_type = obj.original.save_type;
-                        $('#modify_save_type').text(save_type);
-                        $('#renameForm').resetForm();
-                        $("label.error").remove();
-                        if(save_type === 1) {
-                            var text = obj.text;
-                            $("#rename").val(text);
-                            $("#rename_view_div").show();
-                            $("#rich_text_view_div").hide();
-                        } else {
-                            var content = obj.original.content;
-                            $("#summernote_view").summernote('code', content);
-                            $("#rename_view_div").hide();
-                            $("#rich_text_view_div").show();
-                        } 
-
-                        $('#renameModal').modal();
-                    }
-                },
-                "删除":{
-                    "separator_before"  : false,
-                    //"icon"              : false,
-                    "separator_after"   : false,
-                    "_disabled"         : false, //(this.check("delete_node", data.reference, this.get_parent(data.reference), "")),
-                    "label"             : "删除",
-                    "icon"              :"glyphicon glyphicon-remove",
-                    "action"            : function (data) {
-                        var inst = $.jstree.reference(data.reference);
-                        var obj = inst.get_node(data.reference);
-                        console.log('obj=', obj);
-                        var question_id = obj.id;
-                        $.confirm({
-                            title: '请确认',
-                            content: '确认删除？',
-                            type: 'blue',
-                            typeAnimated: true,
-                            buttons: {
-                                confirm: {
-                                    text: '确认',
-                                    btnClass: 'btn-red',
-                                    action: function() {
-                                        disable_node(question_id, 1);
-                                    }
-                                },
-                                cancel: {
-                                    text: '取消',
-                                    action: function() {
-                                        console.log('clicked cancel');
-                                    }
-                                }
-                            }
-                        });
-                        /*
-                        if(inst.is_selected(obj)) {
-                            inst.delete_node(inst.get_selected());
-                        }
-                        else {
-                            inst.delete_node(obj);
-                        }
-                        */
-                    }
-                }
+            "items": custom_menu
+        },
+        'types' : {
+            '#' : {},
+            'enable' : {
+            },
+            'disable' : {
+            },
+            'delete' : {
             }
         }
     });
@@ -565,7 +457,7 @@ $(document).ready(function () {
         var sel = ref.get_selected();
         console.log('selected ', sel);
         var sel_id = sel[0];
-        disable_node(sel_id, 1);
+        change_status_node(sel_id, 1);
         /*
         var inst = $.jstree.reference(sel_id);
         var obj = inst.get_node(sel_id);
@@ -708,7 +600,6 @@ $(document).ready(function () {
         }
     });
 
-
     $('#summernote_view').summernote({
         minHeight: 460,
         maxHeight: 460,
@@ -759,7 +650,6 @@ $(document).ready(function () {
             }
         }
     });
-
 
     function create_node(sel_id, name, category, save_type, content='') {
         var post_data = {};
@@ -848,7 +738,7 @@ $(document).ready(function () {
         });
     }
 
-    function disable_node(question_id, status) {
+    function change_status_node(question_id, status) {
         var post_data = {};
         var se_userid = window.localStorage.getItem('myid');
         post_data.se_userid = se_userid;
@@ -880,4 +770,194 @@ $(document).ready(function () {
             }
         });
     }
+
+    function custom_menu(node) {
+        var items = {
+            "add":{
+                "label": "添加",
+                "icon": "glyphicon glyphicon-plus",
+                "action": function(data){
+                    var inst = $.jstree.reference(data.reference);
+                    var obj = inst.get_node(data.reference);
+                    var parent = obj.id;
+                    console.log('obj=', obj);
+                    parent_category = obj.original.category;
+                    save_type = obj.original.save_type;
+                    if(save_type == 2){
+                        toastr.warning('富文本叶子节点不能再添加');
+                        return false;
+                    }
+                    var title = parent_category == 2 ? '问题' : '答案';
+                    $("#normal_question_title").text(title);
+                    $("#normal_question_parent").text(parent);
+                    $("#normal_question_category").text(obj.original.category);
+                    $('#addQuestionCreateForm').resetForm();
+                    $("label.error").remove();
+                    // 添加时默认的是普通文本
+                    $('#rich_text_add_div').hide();
+                    if(obj.original.category === 2){
+                        $('#save_type_add').attr("disabled", true);
+                        $('#normal_text_add_div').show();
+                    }
+                    $("#summernote").summernote('code', '');
+                    $("#addQuestionModal").modal();
+                    /*
+                     inst.create_node(obj, {}, "last", function (new_node) {
+                     console.log('new_node=', new_node);
+                     var parent = new_node.parent;
+                     $("#normal_question_parent").text(parent);
+                     $("#normal_question_category").text(obj.original.category);
+                     $('#addQuestionCreateForm').resetForm();
+                     $("label.error").remove();
+                     $("#addQuestionModal").modal();
+                     });
+                     */
+                }
+            },
+            "modify":{
+                "separator_before"  : false,
+                "separator_after"   : false,
+                "_disabled"         : false, //(this.check("rename_node", data.reference, this.get_parent(data.reference), "")),
+                "label"             : "修改",
+                "shortcut_label"    : 'F2',
+                "icon"              : "glyphicon glyphicon-edit",
+                "action"            : function (data) {
+                    var inst = $.jstree.reference(data.reference);
+                    var obj = inst.get_node(data.reference);
+                    console.log('modify obj:', obj);
+                    var question_id = obj.id;
+                    $("#modify_question_id").text(question_id);
+                    var save_type = obj.original.save_type;
+                    $('#modify_save_type').text(save_type);
+                    $('#renameForm').resetForm();
+                    $("label.error").remove();
+                    if(save_type === 1) {
+                        var text = obj.text;
+                        $("#rename").val(text);
+                        $("#rename_view_div").show();
+                        $("#rich_text_view_div").hide();
+                    } else {
+                        var content = obj.original.content;
+                        $("#summernote_view").summernote('code', content);
+                        $("#rename_view_div").hide();
+                        $("#rich_text_view_div").show();
+                    }
+
+                    $('#renameModal').modal();
+                }
+            },
+            "enable":{
+                "separator_before"  : false,
+                //"icon"              : false,
+                "separator_after"   : false,
+                "_disabled"         : false,
+                "label"             : "打开",
+                "icon"              :"glyphicon glyphicon-ok",
+                "action"            : function (data) {
+                    var inst = $.jstree.reference(data.reference);
+                    var obj = inst.get_node(data.reference);
+                    console.log('obj=', obj);
+                    var question_id = obj.id;
+                    $.confirm({
+                        title: '请确认',
+                        content: '确认打开？',
+                        type: 'blue',
+                        typeAnimated: true,
+                        buttons: {
+                            confirm: {
+                                text: '确认',
+                                btnClass: 'btn-red',
+                                action: function() {
+                                    change_status_node(question_id, 0);
+                                }
+                            },
+                            cancel: {
+                                text: '取消',
+                                action: function() {
+                                    console.log('clicked cancel');
+                                }
+                            }
+                        }
+                    });
+                }
+            },
+            "disable":{
+                "separator_before"  : false,
+                //"icon"              : false,
+                "separator_after"   : false,
+                "_disabled"         : false,
+                "label"             : "关闭",
+                "icon"              :"glyphicon glyphicon-remove",
+                "action"            : function (data) {
+                    var inst = $.jstree.reference(data.reference);
+                    var obj = inst.get_node(data.reference);
+                    console.log('obj=', obj);
+                    var question_id = obj.id;
+                    $.confirm({
+                        title: '请确认',
+                        content: '确认关闭？',
+                        type: 'blue',
+                        typeAnimated: true,
+                        buttons: {
+                            confirm: {
+                                text: '确认',
+                                btnClass: 'btn-red',
+                                action: function() {
+                                    change_status_node(question_id, 1);
+                                }
+                            },
+                            cancel: {
+                                text: '取消',
+                                action: function() {
+                                    console.log('clicked cancel');
+                                }
+                            }
+                        }
+                    });
+                }
+            },
+            "delete":{
+                "separator_before"  : false,
+                //"icon"              : false,
+                "separator_after"   : false,
+                "_disabled"         : false,
+                "label"             : "删除",
+                "icon"              :"glyphicon glyphicon-trash",
+                "action"            : function (data) {
+                    var inst = $.jstree.reference(data.reference);
+                    var obj = inst.get_node(data.reference);
+                    console.log('obj=', obj);
+                    var question_id = obj.id;
+                    $.confirm({
+                        title: '请确认',
+                        content: '确认删除？',
+                        type: 'blue',
+                        typeAnimated: true,
+                        buttons: {
+                            confirm: {
+                                text: '确认',
+                                btnClass: 'btn-red',
+                                action: function() {
+                                    change_status_node(question_id, 2);
+                                }
+                            },
+                            cancel: {
+                                text: '取消',
+                                action: function() {
+                                    console.log('clicked cancel');
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        };
+        if (node.type === 'enable') {
+            delete items.enable;
+        } else if (node.type === 'disable') {
+            delete items.disable;
+        }
+        return items;
+    }
+
 });
