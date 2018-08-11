@@ -16,14 +16,14 @@ LOGFILE = {
 database = {
     'house_core':{
         'engine': 'pymysql',
-        'passwd': '123456',
+        'passwd': '',
         'charset': 'utf8',
         'db': 'house_core',
         'idle_timeout': 10,
         'host': '127.0.0.1',
-        'user': 'xuncheng',
+        'user': 'root',
         'port': 3306,
-        'conn': 15
+        'conn': 10
     },
 
 }
@@ -69,21 +69,19 @@ DEFAULT_ACTIVE = 1
 # 终端绑定默认2
 TERMBIND_STATE = 2
 #允许登录的手机号
-ALLOW_LOGIN_MOBILE = ['13802438716', '13802438718']
+ALLOW_LOGIN_MOBILE = ['13802438716', '13802438717']
 #允许添加用户的账号
 ALLOW_ADD_USER_ID = [1]
 #cookie 配置
-# cookie_conf = { 'expires':60*60*24*3, 'max_age':60*60*24*3, 'domain':'192.168.0.103', 'path':'/posp'}
-cookie_conf = { 'expires':60*60*24*3, 'max_age':60*60*24*3, 'domain':'mis.xunchengfangfu.com', 'path':'/mis'}
+cookie_conf = { 'expires':60*60*24*3, 'max_age':60*60*24*3, 'domain':'127.0.0.1', 'path':'/mis'}
 # 上传的文件存放位置
-SAVE_PATH = '/home/xunchengfangfu/house/house_mis_v2/bin/static/upload/icon/'
+SAVE_PATH = '/Users/admin/Documents/develop/myproject/house/house_mis_v2/bin/static/upload/icon/'
 # 上传的文件存储位置
-FILE_SAVE_PATH = '/home/xunchengfangfu/house/house_mis_v2/bin/static/upload/file/'
-# 
+FILE_SAVE_PATH = '/Users/admin/Documents/develop/myproject/house/house_mis_v2/bin/static/upload/file/'
+#
 TAIL_PATH = '/mis/static/upload/icon/'
 # 链接前缀
-# BASE_URL = 'http://' + cookie_conf.get('domain') + ':' + str(PORT) + TAIL_PATH
-BASE_URL = 'http://' + cookie_conf.get('domain') + TAIL_PATH
+BASE_URL = 'http://' + cookie_conf.get('domain') +':' + str(PORT) +  TAIL_PATH
 
 # 退款需要的参数
 API_KEY = ''
@@ -91,6 +89,6 @@ APPID = ''
 MCH_ID = ''
 SECRET = ''
 # 协议文件
-AGREEMENT = '/home/xunchengfangfu/house/house_mis_v2/data/agreement.html'
+AGREEMENT = '/Users/admin/Documents/develop/myproject/house/house_mis_v2/data/agreement.html'
 # 滚动文字文案
-BANNER_TEXT = '/home/xunchengfangfu/house/house_mis_v2/data/banner.txt'
+BANNER_TEXT = '/Users/admin/Documents/develop/myproject/house/house_mis_v2/data/banner.txt'
