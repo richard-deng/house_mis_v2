@@ -627,7 +627,12 @@ $(document).ready(function(){
         //post_data.content = $('#text_content_add').val();
         if(post_data.save_type === "1") {
             post_data.content = $('#summernote').summernote('code');
+            if(post_data.content.length > RICH_TEXT_MAX_LENGTH){
+                toastr.warning("内容太长");
+                return false;
+            }
         }
+
         post_data.available = $('#text_available_add').val();
         post_data.icon = $('#text_icon_name_add').text();
 

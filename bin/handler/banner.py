@@ -72,7 +72,8 @@ class BannerViewHandler(BaseHandler):
         params = self.validator.data
         banner_id = params.pop('banner_id')
         banner = Banners(banner_id)
-        content = params['content']
+        #content = params['content']
+        content = self.req.input().get('content')
         params['content'] = base64.b64encode(content)
         ret = banner.update(params)
         if ret != 1:

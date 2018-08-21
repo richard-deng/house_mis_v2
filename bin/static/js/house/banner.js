@@ -247,6 +247,11 @@ $(document).ready(function(){
             toastr.warning('请输入内容');
             return false;
         }
+
+        if(content.length > RICH_TEXT_MAX_LENGTH){
+            toastr.warning("内容太长");
+            return false;
+        }
         var se_userid = window.localStorage.getItem('myid');
         var post_data = {};
         post_data.se_userid = se_userid;
@@ -423,6 +428,11 @@ $(document).ready(function(){
         var content = $('#content_create').summernote('code');
         if(!content){
             toastr.warning('请填写内容');
+            return false;
+        }
+
+        if(content.length > RICH_TEXT_MAX_LENGTH){
+            toastr.warning("内容太长");
             return false;
         }
 

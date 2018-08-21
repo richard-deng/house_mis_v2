@@ -3,6 +3,7 @@
  */
 $(document).ready(function () {
     //get_tree();
+
     var img_src_prefix = 'http://mis.xunchengfangfu.com';
     var default_parent = -1;
     var se_userid = window.localStorage.getItem('myid');
@@ -170,6 +171,7 @@ $(document).ready(function () {
 
         $('#addQuestionCreateForm').resetForm();
         $("label.error").remove();
+        $("textarea").css('height', '');
         $('#addQuestionModal').modal();
     });
 
@@ -263,6 +265,11 @@ $(document).ready(function () {
                 toastr.warning("请填写富文本内容");
                 return false;
             }
+
+            if(content.length > RICH_TEXT_MAX_LENGTH){
+                toastr.warning("内容太长");
+                return false;
+            }
         }
 
         var parent = $('#normal_question_parent').text();
@@ -291,6 +298,7 @@ $(document).ready(function () {
 
         $('#addAnswerCreateForm').resetForm();
         $("label.error").remove();
+        $("textarea").css('height', '');
         $('#addAnswerModal').modal();
 
         /*
@@ -367,6 +375,7 @@ $(document).ready(function () {
 
         $('#renameForm').resetForm();
         $("label.error").remove();
+        $("textarea").css('height', '');
         $('#renameModal').modal();
 
     });
@@ -445,7 +454,11 @@ $(document).ready(function () {
             name = $('#rename').val();
         } else {
             console.log('2');
-            content = $("#summernote_view").summernote('code'); 
+            content = $("#summernote_view").summernote('code');
+            if(content.length > RICH_TEXT_MAX_LENGTH){
+                toastr.warning("内容太长");
+                return false;
+            }
         }
         var question_id = $('#modify_question_id').text();
         update_node(question_id, name, content);
@@ -550,8 +563,8 @@ $(document).ready(function () {
     });
 
     $('#summernote').summernote({
-        minHeight: 460,
-        maxHeight: 460,
+        minHeight: 400,
+        maxHeight: 400,
         minWidth: 710,
         maxWidth: 710,
         focus: false,
@@ -601,8 +614,8 @@ $(document).ready(function () {
     });
 
     $('#summernote_view').summernote({
-        minHeight: 460,
-        maxHeight: 460,
+        minHeight: 400,
+        maxHeight: 400,
         minWidth: 710,
         maxWidth: 710,
         focus: false,
@@ -795,7 +808,13 @@ $(document).ready(function () {
                     $("label.error").remove();
                     // 添加时默认的是普通文本
                     $('#rich_text_add_div').hide();
-                    if(obj.original.category === 2){
+                    console.log('original.category: ', obj.original.category, obj.original.category === 2);
+                    if(obj.original.category === 1){
+                        // 当前层是问题下面可以添加答案，可以有富文本，文本
+                        $('#save_type_add').attr("disabled", false);
+                        $('#normal_text_add_div').show();
+                    } else {
+                        // 当前层是答案下面添加问题，问题只有文本
                         $('#save_type_add').attr("disabled", true);
                         $('#normal_text_add_div').show();
                     }

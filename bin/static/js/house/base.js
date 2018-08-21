@@ -29,3 +29,5 @@ function split_key(key) {
     }
 }
 
+// 富文本最大的长度
+var RICH_TEXT_MAX_LENGTH = 50000;
